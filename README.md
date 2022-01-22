@@ -310,6 +310,8 @@ We add the connexion of these three slots :
     connect(ui->completed,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(thirdtask()));
 
 ```
+ [(**Back to top**)](#back)
+
 3.We added a closeEvent that save the data in a file 
   First, we declare the slots in the header file
   
@@ -340,6 +342,8 @@ void toDoApp::closeEvent(QCloseEvent *e){
 }
 
 ```
+
+
 4.For open the previous data , we added some line to open our file.txt
 ```javascript
 QFile file("/Users/hp/Desktop/save.txt");
@@ -359,6 +363,8 @@ QFile file("/Users/hp/Desktop/save.txt");
     }
 
 ```
+ [(**Back to top**)](#back)
+
 5. we added a slots called Pending slot and completed slot
 First, we declare the slots in the header file
 ```javascript
@@ -392,6 +398,9 @@ We add the connexion of these slots to enable the actions to show or hide our li
 connect(pending,&QAction::triggered,this,&toDoApp::PendingSlot);
 connect(completed,&QAction::triggered,this,&toDoApp::CompletedSlot);
 ```
+
+ [(**Back to top**)](#back)
+
 6. we added a slots called quit to close the window, and the about and aboutQt slots:
 
 First, we declare the slots in the header file
@@ -447,8 +456,421 @@ void toDoApp::ClearSlot()
     }
 }
 ```
+Finally here is the code of the header file:
+  ```javascript
+class toDoApp : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    toDoApp(QWidget *parent = nullptr);
+   ~toDoApp();
+
+    
+private:
+    Ui::toDoApp *ui;
+protected:
+    void setUpMainWidget();
+    void createActions();
+    void makeConnexions();
+    void createMenus();
+    void createToolbars();
+    void closeEvent(QCloseEvent *e) override;
+    void dropEvent(QDropEvent *e) override;
+
+private slots:
+    void quit();
+    void NewTask();
+    void aboutslot();
+    void aboutQtslot();
+    void ClearSlot();
+    void Firsttask();
+    void secondtask();
+    void thirdtask();
+
+    void PendingSlot();
+    void CompletedSlot();
+
+private:
+
+    QMenu *fileMenu;
+    QMenu *optionsMenu;
+    QMenu *HelpMenu;
+    QMenu *toolsMenu;
+private:
+    QAction *newtask;
+    QAction *completed;
+    QAction *pending;
+    QAction *about;
+    QAction *aboutQt;
+    QAction *Close;
+    QAction *Clear;
+
+private:
+    QStringList Persistent;
+    QStringList Pending;
+    QStringList Finished;
+
+};
+```
+ [(**Back to top**)](#back)
+
+And here is the implemenation of all functions:
+
+```javascript
+toDoApp::toDoApp(QWidget *parent)
+    : QMainWindow(parent)
+    , ui(new Ui::toDoApp)
+{
+
+    ui->setupUi(this);
+    setUpMainWidget();
+    createActions();
+    makeConnexions();
+    createToolbars();
+    createMenus();
+    setWindowTitle("ToDoApp");
+
+
+    QFile file("/Users/hp/Desktop/save.txt");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+
+    while (!file.atEnd()) {
+        QString line = file.readLine();
+        if(line.at(0)== "1"){
+            ui->pesistent->addItem(line.mid(1,line.size()));
+        }else if(line.at(0)== "2"){
+             ui->Pending->addItem(line.mid(1,line.size()));
+        }else if(line.at(0)== "3"){
+            ui->completed->addItem(line.mid(1,line.size()));
+
+        }
+    }
+
+
+
+}
+
+toDoApp::~toDoApp()
+{
+    delete ui;
+    delete newtask;
+    delete pending;
+    delete completed;
+    delete about;
+    delete aboutQt;
+    delete Close;
+
+    delete fileMenu;
+    delete HelpMenu;
+    delete optionsMenu;
+    delete toolsMenu;
+    delete Clear;
+}
+void toDoApp::createActions()
+{
+
+  QPixmap newIcon(":/newtask_icon.png");
+  newtask= new QAction(newIcon,"&New",this);
+  newtask->setShortcut(tr("CTRL+N"));
+
+  QPixmap pendingIcon(":/pending_icon.png");
+  pending= new QAction(pendingIcon,"&Pending",this);
+
+  QPixmap completedIcon(":/completed_icon.png");
+
+  completed= new QAction(completedIcon,"&Completed",this);
+
+  QPixmap aboutIcon(":/about_icon.png");
+  about= new QAction(aboutIcon,"&About",this);
+  QPixmap aboutQtIcon(":/aboutQt_icon.png");
+  aboutQt= new QAction(aboutQtIcon,"&AboutQt",this);
+
+  QPixmap closeIcon(":/close_icon.png");
+  Close= new QAction(closeIcon,"&Close",this);
+  Close->setShortcut(tr("F5"));
+  QPixmap clearIcon(":/clearicon.png");
+  Clear= new QAction(clearIcon,"&Clear",this);
+  Clear->setShortcut(tr("F7"));
+
+}
+
+void toDoApp::createMenus()
+{
+    fileMenu = menuBar()->addMenu("&File");
+    fileMenu->addAction(newtask);
+    fileMenu->addAction(Close);
+
+    optionsMenu = menuBar()->addMenu("&Options");
+    optionsMenu->addAction(Clear);
+    optionsMenu->addAction(completed);
+    optionsMenu->addAction(pending);
+
+    HelpMenu= menuBar()->addMenu("&Help");
+    HelpMenu->addAction(about);
+    HelpMenu->addAction(aboutQt);
+}
+void toDoApp::createToolbars()
+{
+
+        auto toolbar1 = addToolBar("File");
+        toolbar1->addAction(newtask);
+        toolbar1->addAction(Close);
+        auto toolbar2 = addToolBar("Options");
+        toolbar2->addAction(Clear);
+        toolbar2->addAction(pending);
+        toolbar2->addAction(completed);
+}
+void toDoApp::makeConnexions()
+{
+    connect(Close,&QAction::triggered,this,&toDoApp::quit);
+    connect(Clear,&QAction::triggered,this,&toDoApp::ClearSlot);
+    connect(newtask,&QAction::triggered,this,&toDoApp::NewTask);
+    connect(about,&QAction::triggered,this,&toDoApp::aboutslot);
+    connect(aboutQt,&QAction::triggered,this,&toDoApp::aboutQtslot);
+    connect(pending,&QAction::triggered,this,&toDoApp::PendingSlot);
+    connect(completed,&QAction::triggered,this,&toDoApp::CompletedSlot);
+
+    connect(ui->pesistent,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(Firsttask()));
+    connect(ui->Pending,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(secondtask()));
+    connect(ui->completed,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(thirdtask()));
+}
+void toDoApp::setUpMainWidget()
+{
+
+
+
+    ui->Pending->setVisible(false);
+    ui->completed->setVisible(false);
+    ui->Pending->setDragDropMode(QAbstractItemView::DragDrop);
+    ui->pesistent->setDragDropMode(QAbstractItemView::DragDrop);
+    ui->completed->setDragDropMode(QAbstractItemView::DragDrop);
+    ui->Pending->setDefaultDropAction(Qt::MoveAction);
+    ui->completed->setDefaultDropAction(Qt::MoveAction);
+    ui->pesistent->setDefaultDropAction(Qt::MoveAction);
+
+
+}
+
+
+void toDoApp::quit(){
+    auto reply = QMessageBox::question(this, "Exit","Do you really want to quit?");
+    if(reply == QMessageBox::Yes)
+        qApp->exit();
+}
+void toDoApp::NewTask()
+{
+
+    Dialog1 dialog;
+    auto replu = dialog.exec();
+    if(replu==Dialog1::Accepted){
+        QString text = dialog.getText();
+        if(dialog.getDate()==QDate::currentDate() && !dialog.isChecked()){
+            QIcon TodayIcon(":/Todayicon.png");
+
+            ui->pesistent->addItem(new QListWidgetItem(TodayIcon,text));
+        }
+        else if(dialog.getDate()!=QDate::currentDate() && !dialog.isChecked()){
+            QIcon pendingIcon(":/pending_icon.png");
+
+            ui->Pending->addItem(new QListWidgetItem(pendingIcon,text));
+        }
+        else if(dialog.isChecked()){
+            QIcon completedIcon(":/completed_icon.png");
+
+            ui->completed->addItem(new QListWidgetItem(completedIcon,text));
+        }
+    }
+
+
+}
+void toDoApp::aboutslot()
+{
+    QMessageBox::about(this,"about","to do app is an app to manage tasks");
+}
+void toDoApp::aboutQtslot()
+{
+    QMessageBox::aboutQt(this,"Your Qt");
+}
+
+void toDoApp::PendingSlot(){
+    if(ui->Pending->isVisible()){
+        ui->Pending->hide();
+}else{
+   ui->Pending->show();
+    }
+}
+
+void toDoApp::CompletedSlot(){
+    if(ui->completed->isVisible()){
+        ui->completed->hide();
+}else{
+   ui->completed->show();
+    }
+}
+
+
+void toDoApp::Firsttask(){
+     Dialog1 dialog;
+    int i=1;
+    QString tasks;
+    QListWidgetItem *a = ui->pesistent->currentItem();
+    QStringList list = a->text().split(QRegularExpression("\\W+"),Qt::SkipEmptyParts);
+    tasks+= list[0];
+    while(list[i]!= "Due"){
+        tasks+= " " + list[i];
+        i++;
+
+    }
+    dialog.setdate(list[i+3].toInt(),list[i+1].toInt(),list[i+2].toInt());
+    dialog.task(tasks);
+    dialog.tag(list[i+5]);
+    auto reply = dialog.exec();
+
+    if(reply==  Dialog1::Accepted){
+
+        QString text= dialog.getText();
+        if(dialog.getDate()== QDate::currentDate() && !dialog.isChecked()){
+            QIcon TodayIcon(":/Todayicon.png");
+
+            ui->pesistent->addItem(new QListWidgetItem(TodayIcon,text));
+        }else if(dialog.getDate()!= QDate::currentDate() && !dialog.isChecked()){
+            QIcon pendingIcon(":/pending_icon.png");
+
+            ui->Pending->addItem(new QListWidgetItem(pendingIcon,text));
+
+        }else if(dialog.isChecked()){
+            QIcon completedIcon(":/completed_icon.png");
+
+            ui->completed->addItem(new QListWidgetItem(completedIcon,text));
+        }
+        delete a;
+    }
+
+
+
+}
+void toDoApp::secondtask(){
+    Dialog1 dialog;
+    int i=1;
+    QString tasks;
+    QListWidgetItem *a = ui->Pending->currentItem();
+    QStringList list = a->text().split(QRegularExpression("\\W+"),Qt::SkipEmptyParts);
+     tasks+= list[0];
+    while(list[i]!= "Due"){
+        tasks+= " " + list[i];
+        i++;
+
+    }
+    dialog.setdate(list[i+3].toInt(),list[i+1].toInt(),list[i+2].toInt());
+    dialog.task(tasks);
+    dialog.tag(list[i+5]);
+    auto reply = dialog.exec();
+
+    if(reply== Dialog1::Accepted){
+
+        QString text= dialog.getText();
+        if(dialog.getDate()== QDate::currentDate() && !dialog.isChecked()){
+            QIcon TodayIcon(":/Todayicon.png");
+
+            ui->pesistent->addItem(new QListWidgetItem(TodayIcon,text));
+        }else if(dialog.getDate()!= QDate::currentDate() && !dialog.isChecked()){
+            QIcon pendingIcon(":/pending_icon.png");
+
+            ui->Pending->addItem(new QListWidgetItem(pendingIcon,text));
+
+        }else if(dialog.isChecked()){
+            QIcon completedIcon(":/completed_icon.png");
+
+            ui->completed->addItem(new QListWidgetItem(completedIcon,text));
+        }
+        delete a;
+    }
+}
+
+void toDoApp::thirdtask(){
+    Dialog1 dialog;
+    int i=1;
+    QString tasks;
+    QListWidgetItem *a = ui->completed->currentItem();
+    QStringList list = a->text().split(QRegularExpression("\\W+"),Qt::SkipEmptyParts);
+     tasks+= list[0];
+    while(list[i]!= "Due"){
+        tasks+= " " + list[i];
+        i++;
+
+    }
+    dialog.setdate(list[i+3].toInt(),list[i+1].toInt(),list[i+2].toInt());
+    dialog.task(tasks);
+    dialog.tag(list[i+5]);
+    auto reply = dialog.exec();
+
+    if(reply== Dialog1::Accepted){
+
+        QString text= dialog.getText();
+        if(dialog.getDate()== QDate::currentDate() && !dialog.isChecked()){
+            QIcon TodayIcon(":/Todayicon.png");
+
+            ui->pesistent->addItem(new QListWidgetItem(TodayIcon,text));
+        }else if(dialog.getDate()!= QDate::currentDate() && !dialog.isChecked()){
+            QIcon pendingIcon(":/pending_icon.png");
+
+            ui->Pending->addItem(new QListWidgetItem(pendingIcon,text));
+
+        }else if(dialog.isChecked()){
+            QIcon completedIcon(":/completed_icon.png");
+
+            ui->completed->addItem(new QListWidgetItem(completedIcon,text));
+        }
+        delete a;
+    }
+}
+
+void toDoApp::closeEvent(QCloseEvent *e){
+
+    QFile file("/Users/hp/Desktop/save.txt");
+    if (file.open(QIODevice::ReadWrite| QIODevice::Text)){
+
+        QTextStream out(&file);
+        for (int i=0;i<ui->pesistent->count() ;i++ ) {
+            out<< "1"<< ui->pesistent->item(i)->text() << Qt::endl;
+        }
+        for (int i=0;i<ui->Pending->count() ;i++ ) {
+            out<< "2"<< ui->pesistent->item(i)->text() << Qt::endl;
+        }
+        for (int i=0;i<ui->completed->count() ;i++ ) {
+            out<< "3"<< ui->pesistent->item(i)->text() << Qt::endl;
+        }
+        file.close();
+    }
+}
 
 
 
 
+void toDoApp::dropEvent(QDropEvent *e){
+    Dialog1 dialog;
+    auto reply= dialog.exec();
+}
+
+
+void toDoApp::ClearSlot()
+{
+    ui->Pending->clear();
+    ui->pesistent->clear();
+    ui->completed->clear();
+
+    QFile file("/Users/hp/Desktop/save.txt");
+    if (file.open(QIODevice::ReadWrite| QIODevice::Text)){
+        file.resize(0);
+
+    }
+}
+
+
+      
+```
+
+ [(**Back to top**)](#back)
 
