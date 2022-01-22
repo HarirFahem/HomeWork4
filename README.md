@@ -169,150 +169,8 @@ void toDoApp::NewTask()
 
 }
 ```
-2.For adding a new task, the user choose if the task is for today , pending or finished 
-   First, we declare three slots in the header file for the three lists view
-   ```javascript
-private slots:
-    void Firsttask();
-    void secondtask();
-    void thirdtask();
 
-```
-Then we implement the function in the cpp file :
-    The function first task is for the tasks of today
-   ```javascript
-   void toDoApp::Firsttask(){
-     Dialog1 dialog;
-    int i=1;
-    QString tasks;
-    QListWidgetItem *a = ui->pesistent->currentItem();
-    QStringList list = a->text().split(QRegularExpression("\\W+"),Qt::SkipEmptyParts);
-    tasks+= list[0];
-    while(list[i]!= "Due"){
-        tasks+= " " + list[i];
-        i++;
-
-    }
-    dialog.setdate(list[i+3].toInt(),list[i+1].toInt(),list[i+2].toInt());
-    dialog.task(tasks);
-    dialog.tag(list[i+5]);
-    auto reply = dialog.exec();
-
-    if(reply==  Dialog1::Accepted){
-
-        QString text= dialog.getText();
-        if(dialog.getDate()== QDate::currentDate() && !dialog.isChecked()){
-            QIcon TodayIcon(":/Todayicon.png");
-
-            ui->pesistent->addItem(new QListWidgetItem(TodayIcon,text));
-        }else if(dialog.getDate()!= QDate::currentDate() && !dialog.isChecked()){
-            QIcon pendingIcon(":/pending_icon.png");
-
-            ui->Pending->addItem(new QListWidgetItem(pendingIcon,text));
-
-        }else if(dialog.isChecked()){
-            QIcon completedIcon(":/completed_icon.png");
-
-            ui->completed->addItem(new QListWidgetItem(completedIcon,text));
-        }
-        delete a;
-    }
-
-}
-   ```
- The function second task is for the pending tasks
- ```javascript
-void toDoApp::secondtask(){
-    Dialog1 dialog;
-    int i=1;
-    QString tasks;
-    QListWidgetItem *a = ui->Pending->currentItem();
-    QStringList list = a->text().split(QRegularExpression("\\W+"),Qt::SkipEmptyParts);
-     tasks+= list[0];
-    while(list[i]!= "Due"){
-        tasks+= " " + list[i];
-        i++;
-
-    }
-    dialog.setdate(list[i+3].toInt(),list[i+1].toInt(),list[i+2].toInt());
-    dialog.task(tasks);
-    dialog.tag(list[i+5]);
-    auto reply = dialog.exec();
-
-    if(reply== Dialog1::Accepted){
-
-        QString text= dialog.getText();
-        if(dialog.getDate()== QDate::currentDate() && !dialog.isChecked()){
-            QIcon TodayIcon(":/Todayicon.png");
-
-            ui->pesistent->addItem(new QListWidgetItem(TodayIcon,text));
-        }else if(dialog.getDate()!= QDate::currentDate() && !dialog.isChecked()){
-            QIcon pendingIcon(":/pending_icon.png");
-
-            ui->Pending->addItem(new QListWidgetItem(pendingIcon,text));
-
-        }else if(dialog.isChecked()){
-            QIcon completedIcon(":/completed_icon.png");
-
-            ui->completed->addItem(new QListWidgetItem(completedIcon,text));
-        }
-        delete a;
-    }
-}
-
-```
- The function third task is for the finished tasks
- 
- ```javascript
-void toDoApp::thirdtask(){
-    Dialog1 dialog;
-    int i=1;
-    QString tasks;
-    QListWidgetItem *a = ui->completed->currentItem();
-    QStringList list = a->text().split(QRegularExpression("\\W+"),Qt::SkipEmptyParts);
-     tasks+= list[0];
-    while(list[i]!= "Due"){
-        tasks+= " " + list[i];
-        i++;
-
-    }
-    dialog.setdate(list[i+3].toInt(),list[i+1].toInt(),list[i+2].toInt());
-    dialog.task(tasks);
-    dialog.tag(list[i+5]);
-    auto reply = dialog.exec();
-
-    if(reply== Dialog1::Accepted){
-
-        QString text= dialog.getText();
-        if(dialog.getDate()== QDate::currentDate() && !dialog.isChecked()){
-            QIcon TodayIcon(":/Todayicon.png");
-
-            ui->pesistent->addItem(new QListWidgetItem(TodayIcon,text));
-        }else if(dialog.getDate()!= QDate::currentDate() && !dialog.isChecked()){
-            QIcon pendingIcon(":/pending_icon.png");
-
-            ui->Pending->addItem(new QListWidgetItem(pendingIcon,text));
-
-        }else if(dialog.isChecked()){
-            QIcon completedIcon(":/completed_icon.png");
-
-            ui->completed->addItem(new QListWidgetItem(completedIcon,text));
-        }
-        delete a;
-    }
-}
-
-```
-We add the connexion of these three slots :
-```javascript
-    connect(ui->pesistent,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(Firsttask()));
-    connect(ui->Pending,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(secondtask()));
-    connect(ui->completed,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(thirdtask()));
-
-```
- [(**Back to top**)](#back)
-
-3.We added a closeEvent that save the data in a file 
+2.We added a closeEvent that save the data in a file 
   First, we declare the slots in the header file
   
   ```javascript
@@ -344,7 +202,7 @@ void toDoApp::closeEvent(QCloseEvent *e){
 ```
 
 
-4.For open the previous data , we added some line to open our file.txt
+3.For open the previous data , we added some line to open our file.txt
 ```javascript
 QFile file("/Users/hp/Desktop/save.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -365,7 +223,7 @@ QFile file("/Users/hp/Desktop/save.txt");
 ```
  [(**Back to top**)](#back)
 
-5. we added a slots called Pending slot and completed slot
+4. we added a slots called Pending slot and completed slot
 First, we declare the slots in the header file
 ```javascript
 private slots:
@@ -401,7 +259,7 @@ connect(completed,&QAction::triggered,this,&toDoApp::CompletedSlot);
 
  [(**Back to top**)](#back)
 
-6. we added a slots called quit to close the window, and the about and aboutQt slots:
+5. we added a slots called quit to close the window, and the about and aboutQt slots:
 
 First, we declare the slots in the header file
 ```javascript
@@ -430,7 +288,7 @@ void toDoApp::aboutQtslot(){
 ![Image](/about.png)
 
 ![Image](/aboutQt.png)
-7. we added a slot called clear for delete the content of our list views :
+6. we added a slot called clear for delete the content of our list views :
      First, we declare the slots in the header file
      
      
@@ -476,8 +334,7 @@ protected:
     void createMenus();
     void createToolbars();
     void closeEvent(QCloseEvent *e) override;
-    void dropEvent(QDropEvent *e) override;
-
+    
 private slots:
     void quit();
     void NewTask();
@@ -632,17 +489,13 @@ void toDoApp::makeConnexions()
     connect(pending,&QAction::triggered,this,&toDoApp::PendingSlot);
     connect(completed,&QAction::triggered,this,&toDoApp::CompletedSlot);
 
-    connect(ui->pesistent,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(Firsttask()));
-    connect(ui->Pending,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(secondtask()));
-    connect(ui->completed,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(thirdtask()));
+   
 }
 void toDoApp::setUpMainWidget()
 {
 
 
 
-    ui->Pending->setVisible(false);
-    ui->completed->setVisible(false);
     ui->Pending->setDragDropMode(QAbstractItemView::DragDrop);
     ui->pesistent->setDragDropMode(QAbstractItemView::DragDrop);
     ui->completed->setDragDropMode(QAbstractItemView::DragDrop);
@@ -711,122 +564,6 @@ void toDoApp::CompletedSlot(){
 }
 
 
-void toDoApp::Firsttask(){
-     Dialog1 dialog;
-    int i=1;
-    QString tasks;
-    QListWidgetItem *a = ui->pesistent->currentItem();
-    QStringList list = a->text().split(QRegularExpression("\\W+"),Qt::SkipEmptyParts);
-    tasks+= list[0];
-    while(list[i]!= "Due"){
-        tasks+= " " + list[i];
-        i++;
-
-    }
-    dialog.setdate(list[i+3].toInt(),list[i+1].toInt(),list[i+2].toInt());
-    dialog.task(tasks);
-    dialog.tag(list[i+5]);
-    auto reply = dialog.exec();
-
-    if(reply==  Dialog1::Accepted){
-
-        QString text= dialog.getText();
-        if(dialog.getDate()== QDate::currentDate() && !dialog.isChecked()){
-            QIcon TodayIcon(":/Todayicon.png");
-
-            ui->pesistent->addItem(new QListWidgetItem(TodayIcon,text));
-        }else if(dialog.getDate()!= QDate::currentDate() && !dialog.isChecked()){
-            QIcon pendingIcon(":/pending_icon.png");
-
-            ui->Pending->addItem(new QListWidgetItem(pendingIcon,text));
-
-        }else if(dialog.isChecked()){
-            QIcon completedIcon(":/completed_icon.png");
-
-            ui->completed->addItem(new QListWidgetItem(completedIcon,text));
-        }
-        delete a;
-    }
-
-
-
-}
-void toDoApp::secondtask(){
-    Dialog1 dialog;
-    int i=1;
-    QString tasks;
-    QListWidgetItem *a = ui->Pending->currentItem();
-    QStringList list = a->text().split(QRegularExpression("\\W+"),Qt::SkipEmptyParts);
-     tasks+= list[0];
-    while(list[i]!= "Due"){
-        tasks+= " " + list[i];
-        i++;
-
-    }
-    dialog.setdate(list[i+3].toInt(),list[i+1].toInt(),list[i+2].toInt());
-    dialog.task(tasks);
-    dialog.tag(list[i+5]);
-    auto reply = dialog.exec();
-
-    if(reply== Dialog1::Accepted){
-
-        QString text= dialog.getText();
-        if(dialog.getDate()== QDate::currentDate() && !dialog.isChecked()){
-            QIcon TodayIcon(":/Todayicon.png");
-
-            ui->pesistent->addItem(new QListWidgetItem(TodayIcon,text));
-        }else if(dialog.getDate()!= QDate::currentDate() && !dialog.isChecked()){
-            QIcon pendingIcon(":/pending_icon.png");
-
-            ui->Pending->addItem(new QListWidgetItem(pendingIcon,text));
-
-        }else if(dialog.isChecked()){
-            QIcon completedIcon(":/completed_icon.png");
-
-            ui->completed->addItem(new QListWidgetItem(completedIcon,text));
-        }
-        delete a;
-    }
-}
-
-void toDoApp::thirdtask(){
-    Dialog1 dialog;
-    int i=1;
-    QString tasks;
-    QListWidgetItem *a = ui->completed->currentItem();
-    QStringList list = a->text().split(QRegularExpression("\\W+"),Qt::SkipEmptyParts);
-     tasks+= list[0];
-    while(list[i]!= "Due"){
-        tasks+= " " + list[i];
-        i++;
-
-    }
-    dialog.setdate(list[i+3].toInt(),list[i+1].toInt(),list[i+2].toInt());
-    dialog.task(tasks);
-    dialog.tag(list[i+5]);
-    auto reply = dialog.exec();
-
-    if(reply== Dialog1::Accepted){
-
-        QString text= dialog.getText();
-        if(dialog.getDate()== QDate::currentDate() && !dialog.isChecked()){
-            QIcon TodayIcon(":/Todayicon.png");
-
-            ui->pesistent->addItem(new QListWidgetItem(TodayIcon,text));
-        }else if(dialog.getDate()!= QDate::currentDate() && !dialog.isChecked()){
-            QIcon pendingIcon(":/pending_icon.png");
-
-            ui->Pending->addItem(new QListWidgetItem(pendingIcon,text));
-
-        }else if(dialog.isChecked()){
-            QIcon completedIcon(":/completed_icon.png");
-
-            ui->completed->addItem(new QListWidgetItem(completedIcon,text));
-        }
-        delete a;
-    }
-}
-
 void toDoApp::closeEvent(QCloseEvent *e){
 
     QFile file("/Users/hp/Desktop/save.txt");
@@ -846,13 +583,6 @@ void toDoApp::closeEvent(QCloseEvent *e){
     }
 }
 
-
-
-
-void toDoApp::dropEvent(QDropEvent *e){
-    Dialog1 dialog;
-    auto reply= dialog.exec();
-}
 
 
 void toDoApp::ClearSlot()
