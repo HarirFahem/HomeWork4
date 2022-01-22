@@ -423,14 +423,17 @@ void toDoApp::aboutQtslot(){
 ![Image](/aboutQt.png)
 7. we added a slot called clear for delete the content of our list views :
      First, we declare the slots in the header file
-```javascript```
+     
+     
+```javascript
 private slots:
       void ClearSlot();
       
 ```
-     Then we implement the functions in the cpp file 
+    
+Then we implement the functions in the cpp file 
       
-   ```javascript```
+   ```javascript
 void toDoApp::ClearSlot()
 {
     ui->Pending->clear();
