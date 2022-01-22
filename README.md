@@ -44,13 +44,13 @@ We will create an application to manage tasks. It will have all the features of 
 
 <a name="ItemBasedModel"></a>
 
-In the Item Based Model, we will start with the connections made for this app:
+In the Item Based Model, We wrote the code for the graphical and set of actions , now we will write a set of basic functionality. we will start with the connections made for our application:
 
-1.we added a dialog, it prompts the user to enter the task, the date.. For this, we have created this following Ui:
+1.we add the function for the newTask action,we created a Dialog for the user to add tasks, for that, first we created a Form Class, we use the designer and we obtain the form of AddNew, in addition we added some methods to get the content of our line Edit, checkBox, comboBox and the Date Edit. Here is the Form of Add new task:
 
 ![Image](/dialogui.png)
 
-first we add those lines to the header file of the dialog class to !!!!!!!!!!!!!!!!!!!!!
+first we add those lines to the header file of the dialog class :
 ```javascript
 class Dialog1 : public QDialog
 {
@@ -72,7 +72,7 @@ private:
     Ui::Dialog1 *ui;
 };
 ```
-and in the cpp file to!!!!!!!!!!!!
+and in the cpp file we implement our methods:
 ```javascript
 Dialog1::Dialog1(QWidget *parent) :
     QDialog(parent),
@@ -126,11 +126,17 @@ QString Dialog1::getText(){
 }
 ```
 
-In addition,we have declared a private slot called Newtask:
+In addition,we have declared a private slot called Newtask 
 
 ```javascript
 private slots:
     void NewTask();
+```
+We created a connexion between the newtask action and the method : 
+
+
+```javascript
+connect(newtask,&QAction::triggered,this,&toDoApp::NewTask);
 ```
 
 Then, we implement the function in the cpp file:
@@ -163,11 +169,13 @@ void toDoApp::NewTask()
 
 }
 ```
-2. we added a slot called Pending slot
-First, we declare the slot in the header file
+2. we added a slots called Pending slot and completed slot
+First, we declare the slots in the header file
 ```javascript
 private slots:
     void PendingSlot();
+private slots:
+    void CompletedSlot();
 
 ```
 Then we implement the function in the cpp file :
@@ -180,15 +188,7 @@ void toDoApp::PendingSlot(){
    ui->Pending->show();
     }
 }
-```
-3. we added a slot called Completed Slot
-First, we declare the slot in the header file
-```javascript
-private slots:
-    void CompletedSlot();
-```
-Then we implement the function in the cpp file:
-```javascript
+
 void toDoApp::CompletedSlot(){
     if(ui->completed->isVisible()){
         ui->completed->hide();
@@ -197,36 +197,38 @@ void toDoApp::CompletedSlot(){
     }
 }
 ```
-4. we added a slot called 
-5.We added a slot called close to quit the window
-First, we declare the slot in the header file
+We add the connexion of these slots to enable the actions to show or hide our listWidget
+```javascript
+connect(pending,&QAction::triggered,this,&toDoApp::PendingSlot);
+connect(completed,&QAction::triggered,this,&toDoApp::CompletedSlot);
+```
+3. we added a slots called quit to close the window, and the about and aboutQt slots:
+
+First, we declare the slots in the header file
 ```javascript
 private slots:
     void quit();
+    void aboutslot();
+    void aboutQtslot();
+ 
 ```
-Then we implement the function in the cpp file 
+Then we implement the functions in the cpp file 
 ```javascript
 void toDoApp::quit(){
     auto reply = QMessageBox::question(this, "Exit","Do you really want to quit?");
     if(reply == QMessageBox::Yes)
         qApp->exit();
 }
-```
-6.for the item about, we have about and aboutQt :
-For about , we declared a slot called aboutSlot(), then we implement it:
-```javascript
 void toDoApp::aboutslot(){
     QMessageBox::about(this,"about","to do app is an app to manage tasks");;
 }
-```
-![Image](/about.png)
-
-For aboutQT , we declared a slot named aboutQtSlot(), then we implement it:
-```javascript
 void toDoApp::aboutQtslot(){
     QMessageBox::aboutQt(this, "Your Qt");
 }
 ```
+
+![Image](/about.png)
+
 ![Image](/aboutQt.png)
 
 ```javascript```
