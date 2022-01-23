@@ -602,5 +602,275 @@ void toDoApp::ClearSlot()
       
 ```
 
+![Image](todoApp.png)
+
+![Image](TodoApp1.png)
+ 
+ The figure od Itemd Based Model 
+ 
  [(**Back to top**)](#back)
+
+### MVC Model
+
+<a name="MVCModel"></a>
+
+In the MVC Model, We wrote the code for the actions , now we will write a set of basic functionality. we will start with the connections made for our application:
+1. we created three QstringList to 
+2.we add the function for the newTask action,we created a Dialog for the user to add tasks, for that, first we created a Form Class, we use the designer and we obtain the form of AddNew, in addition we added some methods to get the content of our line Edit, checkBox, comboBox and the Date Edit. Here is the Form of Add new task:
+
+![Image](/dialog.png)
+
+first we add those lines to the header file of the dialog class :
+```javascript
+namespace Ui {
+class Dialog1;
+}
+
+class Dialog1 : public QDialog
+{
+    Q_OBJECT
+
+public:
+    explicit Dialog1(QWidget *parent = nullptr);
+    ~Dialog1();
+    void taskDialog();
+    bool isChecked();
+    void setdate(int a,int m, int j);
+    void task(QString t);
+    void tag(QString a);
+    void finished(bool f);
+    QDate getDate();
+    QString getText();
+
+private:
+    Ui::Dialog1 *ui;
+};
+```
+and in the cpp file we implement our methods:
+```javascript
+Dialog1::Dialog1(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::Dialog1)
+{
+    ui->setupUi(this);
+    QDate date =QDate::currentDate();
+
+    ui->dateEdit->setMinimumDate(date);
+
+    ui->dateEdit->setDate(date);
+}
+
+Dialog1::~Dialog1()
+{
+    delete ui;
+}
+void Dialog1::setdate(int a, int m, int j){
+
+    QDate d;
+
+
+    d.setDate(a,m,j);
+
+    ui->dateEdit->setDate(d);
+
+}
+void Dialog1::task(QString t){
+    ui->lineEdit->setText(t);
+}
+void Dialog1::tag(QString a){
+    ui->comboBox->setCurrentText(a);
+}
+
+void Dialog1::finished(bool f){
+    ui->checkBox->setChecked(f);
+
+}
+bool Dialog1::isChecked(){
+    if(ui->checkBox->isChecked()){
+        return true;
+    }
+    return false;
+}
+QDate Dialog1::getDate(){
+    return ui->dateEdit->date();
+}
+QString Dialog1::getText(){
+    QString a= ui->lineEdit->text()+"Due :" + ui->dateEdit->text() + "Tag :" + ui->comboBox->currentText() + "";
+    return a;
+}
+
+}
+```
+
+In addition,we have declared a private slot called Newtask 
+
+```javascript
+private slots:
+    void NewTask();
+```
+We created a connexion between the newtask action and the method : 
+
+
+```javascript
+connect(newtask,&QAction::triggered,this,&toDoApp::NewTask);
+```
+
+Then, we implement the function in the cpp file:
+
+```javascript
+
+void toDoApp::NewTask()
+{
+
+    Dialog1 dialog;
+    auto replu = dialog.exec();
+    if(replu==Dialog1::Accepted){
+        QString text = dialog.getText();
+        QStandardItem *tmp = new QStandardItem;
+
+
+        if(dialog.getDate()==QDate::currentDate() && !dialog.isChecked()){
+            tmp->setIcon(QIcon(":/Todayicon.png"));
+            tmp->setText("1 "+text+" ");
+
+            m1->appendRow(tmp);
+
+            ui->pesistent->setModel(m1);
+            pesistent.append(text);
+
+
+        }
+        else if(dialog.getDate()!=QDate::currentDate() && !dialog.isChecked()){
+
+            tmp->setIcon(QIcon(":/pending_icon.png"));
+            tmp->setText("2 "+text+" ");
+
+            m2->appendRow(tmp);
+
+            ui->Pending->setModel(m2);
+            Pending.append(text);
+
+
+        }
+        else if(dialog.isChecked()){
+
+
+            tmp->setIcon(QIcon(":/completed_icon.png"));
+            tmp->setText("3 "+text+" ");
+
+            m3->appendRow(tmp);
+
+            ui->Completed->setModel(m3);
+            Completed.append(text);
+
+
+        }
+    }
+
+
+}
+
+```
+
+2.We added a closeEvent that save the data in a file 
+  First, we declare the slots in the header file
+  
+  ```javascript
+protected:
+    void closeEvent(QCloseEvent *e) override;
+
+```
+Then we implement the function in the cpp file :
+  ```javascript
+
+
+```
+
+
+3.For open the previous data , we added some line to open our file.txt
+```javascript
+
+
+
+
+```
+ [(**Back to top**)](#back)
+
+4. we added a slots called Pending slot and completed slot
+First, we declare the slots in the header file
+```javascript
+
+
+```
+Then we implement the function in the cpp file :
+
+```javascript
+
+}
+```
+We add the connexion of these slots to enable the actions to show or hide our listWidget
+```javascript
+connect(pending,&QAction::triggered,this,&toDoApp::PendingSlot);
+connect(completed,&QAction::triggered,this,&toDoApp::CompletedSlot);
+```
+
+ [(**Back to top**)](#back)
+
+5. we added a slots called quit to close the window, and the about and aboutQt slots:
+
+First, we declare the slots in the header file
+```javascript
+private slots:
+    void quit();
+    void aboutslot();
+    void aboutQtslot();
+ 
+```
+Then we implement the functions in the cpp file 
+```javascript
+void toDoApp::quit(){
+    auto reply = QMessageBox::question(this, "Exit","Do you really want to quit?");
+    if(reply == QMessageBox::Yes)
+        qApp->exit();
+}
+void toDoApp::aboutslot(){
+    QMessageBox::about(this,"about","to do app is an app to manage tasks");;
+}
+void toDoApp::aboutQtslot(){
+    QMessageBox::aboutQt(this, "Your Qt");
+}
+```
+![Image](/exitpic.png)
+
+![Image](/about.png)
+
+![Image](/aboutQt.png)
+6. we added a slot called clear for delete the content of our list views :
+     First, we declare the slots in the header file
+     
+     
+```javascript
+
+      
+```
+    
+Then we implement the functions in the cpp file 
+      
+   ```javascript
+
+```
+Finally here is the code of the header file:
+  ```javascript
+
+```
+ [(**Back to top**)](#back)
+
+And here is the implemenation of all functions:
+
+```javascript
+    
+```
+
+ [(**Back to top**)](#back)
+
 
