@@ -620,7 +620,7 @@ void toDoApp::ClearSlot()
 
 ![Image](TodoApp1.png)
  
- The figure od Itemd Based Model 
+ The figure of Item Based Model 
  
  [(**Back to top**)](#back)
 
