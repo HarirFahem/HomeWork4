@@ -694,6 +694,12 @@ toDoApp::toDoApp(QWidget *parent)
 
 ```
 
+In the ui Form , we used ListView with splitters :
+
+![Image](todoui.png)
+
+ToDo ui Illustration
+
 2.we add the function for the newTask action,we created a Dialog for the user to add tasks, for that, first we created a Form Class, we use the designer and we obtain the form of AddNew, in addition we added some methods to get the content of our line Edit, checkBox, comboBox and the Date Edit. Here is the Form of Add new task:
 
 ![Image](/dialog.png)
