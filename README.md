@@ -614,7 +614,7 @@ void toDoApp::ClearSlot()
       
 ```
 
->**In This Zip we have the MVCModel ** [ToDoAppItemBased.zip](https://github.com/HarirFahem/HomeWork4/blob/main/ToDoAppItemBased.zip) 
+>**In This Zip we have the Item Based Model ** [ToDoAppItemBased.zip](https://github.com/HarirFahem/HomeWork4/blob/main/ToDoAppItemBased.zip) 
 
 ![Image](todoApp.png)
 
