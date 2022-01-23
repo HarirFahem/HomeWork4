@@ -614,13 +614,13 @@ void toDoApp::ClearSlot()
       
 ```
 
->**In This Zip we have the Item Based Model ** [ToDoAppItemBased.zip](https://github.com/HarirFahem/HomeWork4/blob/main/ToDoAppItemBased.zip) 
+>**In This Zip we have the Item Based ** [ToDoAppItemBased.zip](https://github.com/HarirFahem/HomeWork4/blob/main/ToDoAppItemBased.zip) 
 
 ![Image](todoApp.png)
 
 ![Image](TodoApp1.png)
  
- The figure of Item Based Model 
+ The Item Based Form 
  
  [(**Back to top**)](#back)
 
