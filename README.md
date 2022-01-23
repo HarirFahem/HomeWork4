@@ -10,7 +10,7 @@ create a versatile ToDo app using (Item/Model) based containers
   
 ## **Introduction** 
 
-"" **Programs must be written for people to read, and only incidentally for machines to execute** ""
+"" **when you don't create things, you become defined by your tastes rather than ability. your tastes only narrow & exclude people. so create.** ""
 
 <a name="INTRO"></a>
 
