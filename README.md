@@ -694,7 +694,7 @@ toDoApp::toDoApp(QWidget *parent)
 
 ```
 
-In the ui Form , we used ListView with splitters :
+In the ui Form using QDesigner , we used ListView with splitters :
 
 ![Image](todoui.png)
 
