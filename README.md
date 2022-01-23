@@ -180,7 +180,9 @@ protected:
     void closeEvent(QCloseEvent *e) override;
 
 ```
+
 Then we implement the function in the cpp file :
+
   ```javascript
 void toDoApp::closeEvent(QCloseEvent *e){
 
@@ -205,6 +207,7 @@ void toDoApp::closeEvent(QCloseEvent *e){
 
 
 3.For open the previous data , we added some line to open our file.txt
+
 ```javascript
 QFile file("/Users/hp/Desktop/save.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -227,6 +230,7 @@ QFile file("/Users/hp/Desktop/save.txt");
 
 4. we added a slots called Pending slot and completed slot
 First, we declare the slots in the header file
+
 ```javascript
 private slots:
     void PendingSlot();
@@ -234,6 +238,7 @@ private slots:
     void CompletedSlot();
 
 ```
+
 Then we implement the function in the cpp file :
 
 ```javascript
@@ -253,7 +258,9 @@ void toDoApp::CompletedSlot(){
     }
 }
 ```
+
 We add the connexion of these slots to enable the actions to show or hide our listWidget
+
 ```javascript
 connect(pending,&QAction::triggered,this,&toDoApp::PendingSlot);
 connect(completed,&QAction::triggered,this,&toDoApp::CompletedSlot);
@@ -316,7 +323,9 @@ void toDoApp::ClearSlot()
     }
 }
 ```
+
 Finally here is the code of the header file:
+
   ```javascript
 class toDoApp : public QMainWindow
 {
@@ -372,6 +381,7 @@ private:
 
 };
 ```
+
  [(**Back to top**)](#back)
 
 And here is the implemenation of all functions:
@@ -603,6 +613,7 @@ void toDoApp::ClearSlot()
 
       
 ```
+
 >**In This Zip we have the MVCModel ** [ToDoAppItemBased.zip](https://github.com/HarirFahem/HomeWork4/blob/main/ToDoAppItemBased.zip) 
 
 ![Image](todoApp.png)
@@ -632,6 +643,7 @@ private:
     QStringList Pending;
     QStringList Completed;
 ```
+
 Then, we implement in the cpp file: 
 In this implementation we have two parts, the First one for filling in the table using 'Task.append(line)' , the second one for the model view, we put the icon , the text and we set the model for the visibility(how to represent data and how to show data):
 
@@ -681,11 +693,13 @@ toDoApp::toDoApp(QWidget *parent)
 }
 
 ```
+
 2.we add the function for the newTask action,we created a Dialog for the user to add tasks, for that, first we created a Form Class, we use the designer and we obtain the form of AddNew, in addition we added some methods to get the content of our line Edit, checkBox, comboBox and the Date Edit. Here is the Form of Add new task:
 
 ![Image](/dialog.png)
 
 first we add those lines to the header file of the dialog class :
+
 ```javascript
 namespace Ui {
 class Dialog1;
@@ -711,7 +725,9 @@ private:
     Ui::Dialog1 *ui;
 };
 ```
+
 and in the cpp file we implement our methods:
+
 ```javascript
 Dialog1::Dialog1(QWidget *parent) :
     QDialog(parent),
@@ -907,6 +923,7 @@ private slots:
     void PendingSlot();
     void CompletedSlot();
 ```
+
 Then we implement the function in the cpp file :
 
 ```javascript
@@ -943,6 +960,7 @@ visibility illustration
 5. we added a slots called quit to close the window, and the about and aboutQt slots:
 
 First, we declare the slots in the header file
+
 ```javascript
 private slots:
     void quit();
@@ -951,6 +969,7 @@ private slots:
  
 ```
 Then we implement the functions in the cpp file 
+
 ```javascript
 void toDoApp::quit(){
     auto reply = QMessageBox::question(this, "Exit","Do you really want to quit?");
@@ -964,6 +983,7 @@ void toDoApp::aboutQtslot(){
     QMessageBox::aboutQt(this, "Your Qt");
 }
 ```
+
 ![Image](/exitpic.png)
 
 ![Image](/about.png)
@@ -1056,9 +1076,8 @@ private:
     QStringList Completed;
 
 };
-#endif // TODOAPP_H
-
 ```
+
  [(**Back to top**)](#back)
 
 And here is the implemenation of all functions:
@@ -1349,7 +1368,9 @@ void toDoApp::ClearSlot()
 
 
 ```
+
 ![Image](todo.png)
+
 ![Image](todoapppp.png)
 
 MVC model for ToDoApp
